@@ -1,0 +1,7 @@
+numpy
+spiceypy
+astropy
+pandas
+matplotlib
+aspose-pdf
+pyerfa
