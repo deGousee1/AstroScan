@@ -36,7 +36,7 @@ def stumpff_C(z):
         return 1/2
 
 def stumpff_S(z):
-    if z > 0: #Można zmusić program do użycia przyblizenia 1/6 jak z jest bardzo blisko 0. Zapobiegnie to błedom. To samo do C(z)
+    if z > 0:
         return (np.sqrt(z) - np.sin(np.sqrt(z))) / (np.sqrt(z)**3)
     elif z < 0:
         return (np.sinh(np.sqrt(-z)) - np.sqrt(-z)) / (np.sqrt(-z)**3)
@@ -49,7 +49,7 @@ def get_planet_id(planetname):
     elif planetname == "Venus":
         planetid = 299
     elif planetname == "Earth":
-        planetid = 399 #Można w przyszłości ustawić 3 zamiast 399 czyli barycentrum układu Ziemia-Księżyc a nie samą Ziemię
+        planetid = 399
     elif planetname == "Mars":
         planetid = 4
     elif planetname == "Jupiter":
@@ -60,9 +60,8 @@ def get_planet_id(planetname):
         planetid = 7
     elif planetname == "Neptune":
         planetid = 8
-    #elif planetname == "Pluto":
-    #    planetid = 9
-    #Wyłączyłem Plutona, bo przez mocno nachyloną orbitę psuł trochę funkcję znajdywania optymalnego okna transferowego. Program mógłby wyznaczyć trajektorię na Plutona ale nie gwarantuje tego że to będzie zawsze optymalna trajektoria
+    elif planetname == "Pluto":
+        planetid = 9
     else:
         planetid = 10 # kod błędu
     return planetid
@@ -85,7 +84,7 @@ def ask_for_Entry_Data():
             planet1name = planetName
             planet1id = get_planet_id(planetName)
             if planet1id == 10:
-                print("Given planet name is incorrect. Use names from this list: Mercury, Venus, Earth, Mars, Jupiter, Saturn, Uranus, Neptune. Please try again.")
+                print("Given planet name is incorrect. Use names from this list: Mercury, Venus, Earth, Mars, Jupiter, Saturn, Uranus, Neptune, Pluto. Please try again.")
                 planetName = input("First planet name: ")
                 planet1name = planetName
                 planet1id = get_planet_id(planetName)
@@ -134,14 +133,23 @@ def ask_for_Entry_Data():
     if arrivalOrbitHeight > arrivalOrbMax*1000:
         arrivalOrbitHeight = arrivalOrbMax*1000
         print("Arrival orbit height too high! New valid orbit height is set to", arrivalOrbitHeight/1000, "km.")
-    return date_julian, planet1name, planet1id, planet2name, planet2id, departOrbitHeight, arrivalOrbitHeight
+
+    countCapture = input("Include capture burn cost in the porkchop plots? (y/n): ")
+    if countCapture == "y":
+        countCapture = True
+    elif countCapture == "n":
+        countCapture = False
+    else:
+        print("Please enter either 'y' or 'n'")
+        sys.exit()
+    return date_julian, planet1name, planet1id, planet2name, planet2id, departOrbitHeight, arrivalOrbitHeight, countCapture
 
 def welcomeScreenprint():
     print(r"    ___         __            _____                ")
     print(r"   /   |  _____/ /__________ / ___/_________ _____ ")
     print(r"  / /| | / ___/ __/ ___/ __ \\__ \/ ___/ __ `/ __ \ ")
     print(r" / ___ |(__  ) /_/ /  / /_/ /__/ / /__/ /_/ / / / / ")
-    print(r"/_/  |_/____/\__/_/   \____/____/\___/\__,_/_/ /_/  V.1.2")
+    print(r"/_/  |_/____/\__/_/   \____/____/\___/\__,_/_/ /_/  V.1.3")
     print("")
 
     print(r"Welcome to AstroScan, an interplanetary transfer calculator!")
